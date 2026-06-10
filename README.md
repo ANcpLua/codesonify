@@ -1,3 +1,5 @@
+> **📦 Moved (2026-06-11):** development of this entry continues in the `microsoft-ai-hackathon` monorepo under `Reasoning Agents/dj-copilot/`. This repository is archived as a historical snapshot — and intentionally kept as the public fork of [jpablortiz96/codesonify](https://github.com/jpablortiz96/codesonify) so the MIT provenance chain stays visible.
+
 # 🎧 DJ Copilot — Hear Your Repository as a DJ Set
 
 [![Agents League 2026](https://img.shields.io/badge/Agents%20League-2026-blue)](https://github.com/microsoft/agentsleague)
