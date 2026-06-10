@@ -1,16 +1,63 @@
-# 🎵 CodeSonify — Hear Your Code
+# 🎧 DJ Copilot — Hear Your Repository as a DJ Set
 
 [![Agents League 2026](https://img.shields.io/badge/Agents%20League-2026-blue)](https://github.com/microsoft/agentsleague)
-[![Track](https://img.shields.io/badge/Track-Creative%20Apps-purple)](https://github.com/microsoft/agentsleague/tree/main/starter-kits/1-creative-apps)
-[![Built with](https://img.shields.io/badge/Built%20with-GitHub%20Copilot-green)](https://github.com/features/copilot)
+[![Track](https://img.shields.io/badge/Track-Reasoning%20Agents%20(Foundry)-purple)](https://github.com/microsoft/agentsleague)
+[![Foundry IQ](https://img.shields.io/badge/Grounded%20by-Foundry%20IQ-blue)](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/concepts/what-is-foundry-iq)
 [![MCP Tools](https://img.shields.io/badge/MCP%20Tools-6-orange)](https://code.visualstudio.com/docs/copilot/customization/mcp-servers)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-> **Every line of code has a melody.** CodeSonify transforms source code into real music. Functions become melodies, loops become rhythms, conditionals become chord changes, and bugs sound dissonant. Export to MIDI, sonify git diffs, and hear the evolution of your codebase — all integrated into GitHub Copilot via MCP.
+> Point DJ Copilot at any repository and it plays it as **one continuous, harmonically-mixed DJ set** — every source file becomes a track with its own key and BPM, the set follows a real energy arc, and **every transition decision retrieves from and cites a curated dj-craft knowledge base served by Foundry IQ** (an Azure AI Search knowledge base queried over MCP).
+
+## 🧬 Provenance — what's new vs. what it stands on
+
+This entry **builds on the MIT-licensed [CodeSonify](https://github.com/jpablortiz96/codesonify) engine by [@jpablortiz96](https://github.com/jpablortiz96)** — winner of the previous Agents League (Creative Apps track) — used with permission via its MIT license: this repo is a public fork, the license and copyright are preserved, and the engine is credited throughout. Standing on shoulders, openly.
+
+**Everything this entry is judged on is new, original work for this league:**
+
+| Layer | What | Where |
+|---|---|---|
+| 🆕 DJSequencer | energy-arc ordering, Camelot wheel, ±6% BPM windows, stitched continuous set | `src/dj/sequencer.ts`, `src/dj/camelot.ts` |
+| 🆕 Foundry IQ grounding | MCP client for Azure AI Search knowledge bases — the league's required tool, doing the reasoning | `src/dj/knowledge.ts` |
+| 🆕 dj-craft knowledge base | 16-doc curated corpus (Camelot mixing, energy management, BPM/phrase craft), served live **and** as offline fixture | `src/dj/djCraftCorpus.ts` |
+| 🆕 MCP tool `sequence_set` | repo in → cited DJ set out, for any MCP host | `src/mcp/index.ts` |
+| 🆕 Telemetry | OpenTelemetry → [qyl](https://github.com/O-ANcppLua/qyl), api-key-redacting exporter | `src/dj/telemetry.ts` |
+| 🎵 Engine (MIT, inherited) | per-file code→music composition, MIDI generation, web UI | `src/core/`, `src/web/` |
+
+## 🗺 Architecture
+
+```mermaid
+flowchart LR
+    REPO[("any repository")] --> COMP
+    subgraph ENGINE["CodeSonify engine — MIT, @jpablortiz96"]
+        COMP["Composer<br/>file → composition (key + BPM)"]
+        MIDI["MidiGenerator"]
+    end
+    subgraph NEW["DJ Copilot — this entry (new work)"]
+        TOOL(["MCP tool: sequence_set"])
+        SEQ["DJSequencer<br/>energy arc · Camelot wheel"]
+        IQ["Foundry IQ MCP client<br/>knowledge_base_retrieve"]
+        OTEL["OpenTelemetry → qyl<br/>api-key-redacting exporter"]
+    end
+    subgraph GROUND["dj-craft grounding — same corpus, two transports"]
+        KB[("dj-craft-kb<br/>Azure AI Search · Foundry IQ")]
+        FIX["LocalFoundryIq fixture<br/>offline · deterministic"]
+    end
+    TOOL --> SEQ
+    COMP --> SEQ
+    SEQ -- "every transition" --> IQ
+    IQ -- "live" --> KB
+    IQ -. "offline" .-> FIX
+    SEQ --> MIDI --> OUT["djset.mid + djset.json<br/>cited setlist"]
+    SEQ --> OTEL
+```
 
 ---
 
-## 🎬 Demo
+# 🎵 The CodeSonify Engine — Hear Your Code
+
+> **Every line of code has a melody.** CodeSonify transforms source code into real music. Functions become melodies, loops become rhythms, conditionals become chord changes, and bugs sound dissonant. Export to MIDI, sonify git diffs, and hear the evolution of your codebase — all integrated into GitHub Copilot via MCP. *(Everything from here down documents the inherited MIT engine.)*
+
+## 🎬 Engine demo (by the original author)
 
 > 📹 *[Watch the demo video →](https://youtu.be/yW3g-tQjNZo)*
 
